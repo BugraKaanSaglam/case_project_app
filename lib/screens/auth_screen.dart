@@ -47,26 +47,26 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(
-      isBackButtonVisible: false,
-      title: "",
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 600),
-          transitionBuilder: (child, animation) {
-            return AnimatedBuilder(
-              animation: animation,
-              child: child,
-              builder: (context, childWidget) {
-                final status = animation.status;
-                final color = (status == AnimationStatus.forward || status == AnimationStatus.reverse) ? Colors.black : Colors.blue;
-                return Card(color: color, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), child: ScaleTransition(scale: animation, child: childWidget));
-              },
-            );
-          },
-          child: isSignIn ? _buildSignIn(context) : _buildSignUp(context),
-        ),
+    return globalScaffold(isBackButtonVisible: false, title: "", body: authBody());
+  }
+
+  Widget authBody() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 600),
+        transitionBuilder: (child, animation) {
+          return AnimatedBuilder(
+            animation: animation,
+            child: child,
+            builder: (context, childWidget) {
+              final status = animation.status;
+              final color = (status == AnimationStatus.forward || status == AnimationStatus.reverse) ? Colors.black : Colors.blue;
+              return Card(color: color, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), child: ScaleTransition(scale: animation, child: childWidget));
+            },
+          );
+        },
+        child: isSignIn ? _buildSignIn(context) : _buildSignUp(context),
       ),
     );
   }
