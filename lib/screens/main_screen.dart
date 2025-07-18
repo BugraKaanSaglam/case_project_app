@@ -1,5 +1,6 @@
 import 'package:case_project_app/widget/movie_card.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../global/global_scaffold.dart';
 import '../global/global_variables.dart';
 import '../api/api_services.dart';
@@ -66,7 +67,17 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildMovieFeed(), bottomNavigationBar: _buildBottomAppBar());
+    return globalScaffold(title: '', body: _buildMovieFeed(), bottomBarItems: _bottomBarItems(context), isBackButtonVisible: false, isAppbarVisible: false);
+  }
+
+  List<Widget> _bottomBarItems(BuildContext context) {
+    return [
+      // Home button
+      OutlinedButton.icon(onPressed: () => Navigator.pushNamed(context, '/home'), icon: FaIcon(FontAwesomeIcons.house, color: Colors.white), label: Text('Anasayfa', style: TextStyle(color: Colors.white)), style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white54), shape: StadiumBorder(), padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), backgroundColor: Colors.black.withOpacity(0.3))),
+
+      // Profile button
+      OutlinedButton.icon(onPressed: () => Navigator.pushNamed(context, '/profile'), icon: FaIcon(FontAwesomeIcons.user, color: Colors.white), label: Text('Profil', style: TextStyle(color: Colors.white)), style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white54), shape: StadiumBorder(), padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), backgroundColor: Colors.black.withOpacity(0.3))),
+    ];
   }
 
   Widget _buildMovieFeed() {
@@ -88,10 +99,6 @@ class _MainScreenState extends State<MainScreen> {
         return MovieCard(movie: movie, isFavorite: isFav, imageUrl: imageUrl, onToggleFavorite: () => _toggleFavorite(movie.id));
       },
     );
-  }
-
-  Widget _buildBottomAppBar() {
-    return BottomAppBar(color: Colors.black.withOpacity(0.5), child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[IconButton(icon: const Icon(Icons.home, color: Colors.white, size: 30), onPressed: () {}), IconButton(icon: const Icon(Icons.search, color: Colors.white, size: 30), onPressed: () {}), IconButton(icon: const Icon(Icons.add_box_outlined, color: Colors.white, size: 30), onPressed: () {}), IconButton(icon: const Icon(Icons.favorite, color: Colors.white, size: 30), onPressed: () {}), IconButton(icon: const Icon(Icons.person, color: Colors.white, size: 30), onPressed: () {})]));
   }
 
   @override
