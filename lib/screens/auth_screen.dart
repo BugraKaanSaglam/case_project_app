@@ -3,6 +3,7 @@ import 'package:case_project_app/api/api_services.dart';
 import 'package:case_project_app/database/db_helper.dart';
 import 'package:case_project_app/helper/error_dialog.dart';
 import 'package:case_project_app/screens/main_screen.dart';
+import 'package:case_project_app/widget/social_buttons.dart';
 import 'package:flutter/material.dart';
 import '../global/global_scaffold.dart';
 import '../global/global_variables.dart';
@@ -83,7 +84,8 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Giriş Yap', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(32), fontWeight: FontWeight.bold)),
+                Text('Merhabalar', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(32), fontWeight: FontWeight.bold)),
+                Text('Tempus varius a vitae interdum id tortor elementum tristique eleifend at.', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(16)), textAlign: TextAlign.center),
                 const SizedBox(height: 30),
                 _buildTextField(controller: _signInEmailController, label: 'Email'),
                 const SizedBox(height: 24),
@@ -94,10 +96,12 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
                     await singInPressed();
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                  child: Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12), child: Text('GİRİŞ', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
+                  child: Padding(padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 12), child: Text('GİRİŞ', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
                 ),
                 const SizedBox(height: 12),
                 _buildCheckBoxField(),
+                const SizedBox(height: 12),
+                SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
                 const SizedBox(height: 12),
                 TextButton(onPressed: () => setState(() => isSignIn = false), child: Row(children: [Text('Hesabın Yok Mu?', style: TextStyle(color: Colors.white70, fontSize: textScaler.scale(16))), Text(' Kayıt Ol', style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))])),
                 const SizedBox(height: 100),
@@ -121,7 +125,8 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Kayıt Ol', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(28), fontWeight: FontWeight.bold)),
+                Text('Hoşgeldiniz', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(28), fontWeight: FontWeight.bold)),
+                Text('Tempus varius a vitae interdum id tortor elementum tristique eleifend at.', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(16)), textAlign: TextAlign.center),
                 const SizedBox(height: 24),
                 _buildTextField(controller: _signUpNameController, label: 'İsim'),
                 const SizedBox(height: 16),
@@ -131,7 +136,9 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
                 const SizedBox(height: 16),
                 _buildTextField(controller: _signUpPassword2Controller, label: 'Şifre Tekrar', obscureText: true),
                 const SizedBox(height: 24),
-                ElevatedButton(onPressed: () async => await singUpPressed(), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12), child: Text('KAYDOL', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold)))),
+                ElevatedButton(onPressed: () async => await singUpPressed(), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Padding(padding: const EdgeInsets.symmetric(horizontal: 88, vertical: 12), child: Text('KAYDOL', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold)))),
+                const SizedBox(height: 12),
+                SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
                 const SizedBox(height: 12),
                 TextButton(onPressed: () => setState(() => isSignIn = true), child: Row(children: [Text('Zaten Hesabın Var Mı?', style: TextStyle(color: Colors.white70, fontSize: textScaler.scale(16))), Text(' Giriş yap', style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))])),
                 const SizedBox(height: 100),

@@ -10,14 +10,11 @@ class SocialLoginButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Butonlar arası boşluk
     const spacing = SizedBox(width: 16);
-
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [_SocialButton(icon: FontAwesomeIcons.google, onTap: onGoogleTap), spacing, _SocialButton(icon: FontAwesomeIcons.apple, onTap: onAppleTap), spacing, _SocialButton(icon: FontAwesomeIcons.facebookF, onTap: onFacebookTap)]);
   }
 }
 
-/// Tek bir sosyal butonun stili
 class _SocialButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;

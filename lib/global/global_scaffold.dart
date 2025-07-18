@@ -14,5 +14,5 @@ AppBar globalAppbar(String title, bool isBackButtonVisible) => AppBar(
   //Title
   title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
   //BackButton
-  leading: Builder(builder: (context) => IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () async => Navigator.maybePop(context))),
+  leading: isBackButtonVisible ? Builder(builder: (context) => IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () async => Navigator.maybePop(context))) : const SizedBox.shrink(),
 );

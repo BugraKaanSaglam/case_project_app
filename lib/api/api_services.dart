@@ -7,34 +7,53 @@ import 'package:case_project_app/dto/photo_dto.dart';
 import 'package:case_project_app/dto/movie_dto.dart';
 
 class ApiService {
-  final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl, headers: {'Content-Type': 'application/json'}));
+  final Dio _dio;
+  String? _token;
 
-  // Login: authenticate user and receive JWT token
+  ApiService({String? token}) : _dio = Dio(BaseOptions(baseUrl: baseUrl, headers: {'Content-Type': 'application/json'})) {
+    _token = token;
+    _updateAuthHeader();
+  }
+
+  void _updateAuthHeader() {
+    if (_token != null) {
+      _dio.options.headers['Authorization'] = 'Bearer $_token';
+    } else {
+      _dio.options.headers.remove('Authorization');
+    }
+  }
+
+  // Login: authenticate user and store JWT
   Future<LoginDTO> login({required String email, required String password}) async {
-    final resp = await _dio.post('/user/login', data: {'email': email, 'password': password});
-    final data = (resp.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
-    return LoginDTO.fromJson(data);
+    final response = await _dio.post('/user/login', data: {'email': email, 'password': password});
+    final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+    final loginDTO = LoginDTO.fromJson(data);
+    _token = loginDTO.token;
+    _updateAuthHeader();
+    return loginDTO;
   }
 
   // Get Profile: retrieve current user's profile information
   Future<ProfileDTO> getProfile() async {
-    final resp = await _dio.get('/user/profile');
-    // data comes as root JSON
-    return ProfileDTO.fromJson(resp.data as Map<String, dynamic>);
+    final response = await _dio.get('/user/profile');
+    return ProfileDTO.fromJson(response.data as Map<String, dynamic>);
   }
 
-  // Register: create a new user and receive JWT token
-  Future<LoginDTO> register({required String email, required String name, required String password}) async {
-    final resp = await _dio.post('/user/register', data: {'email': email, 'name': name, 'password': password});
-    final data = (resp.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
-    return LoginDTO.fromJson(data);
+  // Register: create a new user and receive JWT
+  Future<LoginDTO> register({required String name, required String email, required String password}) async {
+    final response = await _dio.post('/user/register', data: {'name': name, 'email': email, 'password': password});
+    final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+    final loginDTO = LoginDTO.fromJson(data);
+    _token = loginDTO.token;
+    _updateAuthHeader();
+    return loginDTO;
   }
 
   // Upload Photo: upload a profile picture and receive URL
   Future<PhotoDTO> uploadPhoto(File file) async {
-    final form = FormData.fromMap({'file': await MultipartFile.fromFile(file.path, filename: file.uri.pathSegments.last)});
-    final resp = await _dio.post('/user/upload_photo', data: form);
-    return PhotoDTO.fromJson(resp.data as Map<String, dynamic>);
+    final formData = FormData.fromMap({'file': await MultipartFile.fromFile(file.path, filename: file.uri.pathSegments.last)});
+    final response = await _dio.post('/user/upload_photo', data: formData);
+    return PhotoDTO.fromJson(response.data as Map<String, dynamic>);
   }
 
   // Toggle Favorite: add or remove a movie from favorites
@@ -43,16 +62,20 @@ class ApiService {
   }
 
   // Get Favorite Movies: fetch list of user's favorite movies
-  Future<List<MovieDTO>> getFavoriteMovies() async {
-    final resp = await _dio.get('/movie/favorites');
-    final list = resp.data as List;
+  Future<List<MovieDTO>> getFavoriteMovies({int page = 1}) async {
+    final response = await _dio.get('/movie/favorites', queryParameters: {'page': page});
+    final list = (response.data as Map<String, dynamic>)['data'] as List;
     return list.map((e) => MovieDTO.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   // Get Movie List: fetch list of all movies
-  Future<List<MovieDTO>> getMovieList() async {
-    final resp = await _dio.get('/movie/list');
-    final list = resp.data as List;
-    return list.map((e) => MovieDTO.fromJson(e as Map<String, dynamic>)).toList();
+  Future<List<MovieDTO>> fetchMoviePage({int page = 1}) async {
+    final response = await _dio.get('/movie/list', queryParameters: {'page': page});
+    if (response.statusCode != 200) {
+      throw DioException(requestOptions: response.requestOptions, response: response, error: 'Sunucu $page. sayfayı döndürmedi (status ${response.statusCode})');
+    }
+    final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+    final moviesJson = data['movies'] as List<dynamic>;
+    return moviesJson.map((e) => MovieDTO.fromJson(e as Map<String, dynamic>)).toList();
   }
 }
