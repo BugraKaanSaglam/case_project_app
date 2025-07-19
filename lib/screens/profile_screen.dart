@@ -2,6 +2,7 @@
 
 import 'package:case_project_app/dto/movie_dto.dart';
 import 'package:case_project_app/global/global_variables.dart';
+import 'package:case_project_app/screens/profilephoto_screen.dart';
 import 'package:case_project_app/widget/bottombar_items.dart';
 import 'package:case_project_app/widget/resolve_image.dart';
 import 'package:flutter/material.dart';
@@ -48,13 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         CircleAvatar(radius: 36, backgroundImage: NetworkImage(loginDTO.photoUrl ?? 'https://via.placeholder.com/150')),
         const SizedBox(width: 16),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(loginDTO.name, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)), const SizedBox(height: 4), Text('ID: ${loginDTO.id}', style: const TextStyle(color: Colors.white54, fontSize: 14))])),
-        ElevatedButton(
-          onPressed: () {
-            //* Photo Add Area
-          },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
-          child: const Text('Fotoğraf Ekle', style: TextStyle(fontSize: 14, color: Colors.white)),
-        ),
+        ElevatedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ProfilephotoScreen())), style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)), child: const Text('Fotoğraf Ekle', style: TextStyle(fontSize: 14, color: Colors.white))),
       ],
     );
   }
