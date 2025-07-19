@@ -23,5 +23,5 @@ AppBar globalAppbar(String title, bool isBackButtonVisible) {
 }
 
 BottomNavigationBar globalBottomNavigationBar({required List<Widget> items}) {
-  return BottomNavigationBar(backgroundColor: Colors.black.withOpacity(0.5), items: items.map((item) => BottomNavigationBarItem(icon: item, label: '')).toList(), selectedItemColor: Colors.white, unselectedItemColor: Colors.white70, showUnselectedLabels: false, showSelectedLabels: false);
+  return BottomNavigationBar(type: BottomNavigationBarType.fixed, backgroundColor: Colors.black.withOpacity(0.5), items: items.map((item) => BottomNavigationBarItem(icon: item, label: '')).toList());
 }

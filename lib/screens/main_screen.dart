@@ -1,6 +1,6 @@
+import 'package:case_project_app/widget/bottombar_items.dart';
 import 'package:case_project_app/widget/movie_card.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../global/global_scaffold.dart';
 import '../global/global_variables.dart';
 import '../api/api_services.dart';
@@ -17,8 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   late final ApiService _apiService;
   final PageController _pageController = PageController();
 
-  List<MovieDTO> _displayedMovies = [];
-  Set<String> _favoriteIds = {};
+  final List<MovieDTO> _displayedMovies = [];
 
   int _currentPage = 0;
   final int _pageSize = 5;
@@ -29,15 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _apiService = ApiService(token: loginDTO.token);
-    _initFavorites();
     _fetchMovies();
-  }
-
-  Future<void> _initFavorites() async {
-    final favs = await _apiService.getFavoriteMovies();
-    setState(() {
-      _favoriteIds = favs.map((m) => m.id).toSet();
-    });
   }
 
   Future<void> _fetchMovies() async {
@@ -55,29 +46,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _toggleFavorite(String movieId) async {
-    await _apiService.toggleFavorite(movieId);
-    setState(() {
-      if (_favoriteIds.contains(movieId)) {
-        _favoriteIds.remove(movieId);
-      } else {
-        _favoriteIds.add(movieId);
-      }
+    setState(() async {
+      await _apiService.toggleFavorite(movieId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: '', body: _buildMovieFeed(), bottomBarItems: _bottomBarItems(context), isBackButtonVisible: false, isAppbarVisible: false);
-  }
-
-  List<Widget> _bottomBarItems(BuildContext context) {
-    return [
-      // Home button
-      OutlinedButton.icon(onPressed: () => Navigator.pushNamed(context, '/home'), icon: FaIcon(FontAwesomeIcons.house, color: Colors.white), label: Text('Anasayfa', style: TextStyle(color: Colors.white)), style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white54), shape: StadiumBorder(), padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), backgroundColor: Colors.black.withOpacity(0.3))),
-
-      // Profile button
-      OutlinedButton.icon(onPressed: () => Navigator.pushNamed(context, '/profile'), icon: FaIcon(FontAwesomeIcons.user, color: Colors.white), label: Text('Profil', style: TextStyle(color: Colors.white)), style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.white54), shape: StadiumBorder(), padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), backgroundColor: Colors.black.withOpacity(0.3))),
-    ];
+    return globalScaffold(title: '', body: _buildMovieFeed(), bottomBarItems: bottomBarItems(context, widget), isBackButtonVisible: false, isAppbarVisible: false);
   }
 
   Widget _buildMovieFeed() {
@@ -93,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
         if (index == _displayedMovies.length) return const Center(child: CircularProgressIndicator());
 
         final movie = _displayedMovies[index];
-        final isFav = _favoriteIds.contains(movie.id);
+        final isFav = movie.isFavorite;
         final imageUrl = movie.images.isNotEmpty ? movie.images.first : null;
 
         return MovieCard(movie: movie, isFavorite: isFav, imageUrl: imageUrl, onToggleFavorite: () => _toggleFavorite(movie.id));

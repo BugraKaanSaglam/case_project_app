@@ -62,8 +62,8 @@ class ApiService {
   }
 
   // Get Favorite Movies: fetch list of user's favorite movies
-  Future<List<MovieDTO>> getFavoriteMovies({int page = 1}) async {
-    final response = await _dio.get('/movie/favorites', queryParameters: {'page': page});
+  Future<List<MovieDTO>> getFavoriteMovies() async {
+    final response = await _dio.get('/movie/favorites');
     final list = (response.data as Map<String, dynamic>)['data'] as List;
     return list.map((e) => MovieDTO.fromJson(e as Map<String, dynamic>)).toList();
   }
