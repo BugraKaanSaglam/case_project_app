@@ -1,54 +1,27 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
 
-import 'package:case_project_app/api/api_services.dart';
 import 'package:case_project_app/dto/movie_dto.dart';
 import 'package:case_project_app/global/global_variables.dart';
 import 'package:case_project_app/widget/bottombar_items.dart';
+import 'package:case_project_app/widget/resolve_image.dart';
 import 'package:flutter/material.dart';
 import '../global/global_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key, required this.favoriteMovies});
+  List<MovieDTO> favoriteMovies = [];
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ApiService _apiService = ApiService();
-  List<MovieDTO> _favoriteMovies = [];
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadFavorites();
-  }
-
-  Future<void> _loadFavorites() async {
-    try {
-      final movies = await _apiService.getFavoriteMovies();
-      setState(() {
-        _favoriteMovies = movies;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: 'Profil Detayı', body: profileBody(), bottomBarItems: bottomBarItems(context, widget));
+    return globalScaffold(title: 'Profil Detayı', body: profileBody(), bottomBarItems: bottomBarItems(context, widget, widget.favoriteMovies), isBackButtonVisible: true, isAppbarVisible: true);
   }
 
   Widget profileBody() {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
@@ -57,11 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             // Profile Header
             profileRow(),
-
             const SizedBox(height: 24),
             const Text('Beğendiğim Filmler', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-
             //Favorite Movies Grid
             favoriteMoviesGrid(),
           ],
@@ -89,18 +60,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget favoriteMoviesGrid() {
-    if (_favoriteMovies.isEmpty) {
-      return const Center(child: Text('Favori film bulunamadı.', style: TextStyle(color: Colors.white)));
-    }
+    if (widget.favoriteMovies.isEmpty) return Center(child: Text('Favori film bulunamadı.', style: TextStyle(color: Colors.white)));
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const ScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.7, crossAxisSpacing: 16, mainAxisSpacing: 16),
-      itemCount: _favoriteMovies.length,
+      physics: ScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.7, crossAxisSpacing: 16, mainAxisSpacing: 16),
+      itemCount: widget.favoriteMovies.length,
       itemBuilder: (context, index) {
-        final movie = _favoriteMovies[index];
-        return Card(color: Colors.black.withOpacity(0.3), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: Image.network(movie.images.first, fit: BoxFit.cover)), Padding(padding: const EdgeInsets.all(8.0), child: Text(movie.title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)))]));
+        final movie = widget.favoriteMovies[index];
+        return FutureBuilder<String>(
+          future: resolveBestImageUrl(movie),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator());
+
+            final imageUrl = (snapshot.hasData && snapshot.data!.isNotEmpty) ? snapshot.data! : (movie.images.isNotEmpty ? movie.images.first : '');
+            return Card(color: Colors.black.withOpacity(0.3), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: Image.network(imageUrl, fit: BoxFit.cover)), Padding(padding: EdgeInsets.all(8.0), child: Text(movie.title, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)))]));
+          },
+        );
       },
     );
   }

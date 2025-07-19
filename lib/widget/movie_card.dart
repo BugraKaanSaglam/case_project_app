@@ -31,7 +31,7 @@ class MovieCard extends StatelessWidget {
   }
 
   Widget _buildGradientOverlay() {
-    return Container(decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black.withOpacity(0.8)], stops: const [0.5, 1.0])));
+    return Container(decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black38], stops: const [0.5, 1.0])));
   }
 
   Widget _buildMovieDetails() {
