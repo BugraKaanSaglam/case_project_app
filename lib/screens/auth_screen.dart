@@ -2,6 +2,7 @@
 import 'package:case_project_app/api/api_services.dart';
 import 'package:case_project_app/database/db_helper.dart';
 import 'package:case_project_app/helper/error_dialog.dart';
+import 'package:case_project_app/helper/navigator_services.dart';
 import 'package:case_project_app/screens/main_screen.dart';
 import 'package:case_project_app/widget/social_buttons.dart';
 import 'package:flutter/material.dart';
@@ -226,7 +227,7 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
         globalDatabase.isRememberLogin = isRememberMe;
 
         await DBHelper().update(globalDatabase);
-        await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen()), (Route<dynamic> route) => false);
+        await NavigationService.instance.navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MainScreen()), (route) => false);
       } catch (e) {
         await showAnimatedErrorDialog(context, title: 'HATA', message: 'Lütfen Giriş Bilgilerinizi Kontrol Ediniz!, ${e.toString()}');
       }

@@ -2,6 +2,7 @@
 
 import 'package:case_project_app/dto/movie_dto.dart';
 import 'package:case_project_app/global/global_variables.dart';
+import 'package:case_project_app/helper/navigator_services.dart';
 import 'package:case_project_app/screens/profilephoto_screen.dart';
 import 'package:case_project_app/widget/bottombar_items.dart';
 import 'package:case_project_app/widget/limitedoffer_bottombarsheet.dart';
@@ -62,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(loginDTO.name, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)), const SizedBox(height: 4), Text('ID: ${loginDTO.id}', style: const TextStyle(color: Colors.white54, fontSize: 14))])),
         ElevatedButton(
           onPressed: () {
-            Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => ProfilephotoScreen())).then((shouldRefresh) {
+            NavigationService.instance.navigatorKey.currentState!.push<bool>(MaterialPageRoute(builder: (_) => ProfilephotoScreen())).then((shouldRefresh) {
               if (shouldRefresh == true) setState(() {});
             });
           },

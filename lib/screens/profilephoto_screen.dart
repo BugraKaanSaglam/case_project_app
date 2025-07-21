@@ -69,7 +69,7 @@ class _ProfilephotoScreenState extends State<ProfilephotoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: 'Profil Fotoğrafı Ekle', body: profilePhotoBody());
+    return globalScaffold(title: 'Profil Fotoğrafı Ekle', body: profilePhotoBody(), isBackButtonVisible: false);
   }
 
   Widget profilePhotoBody() {

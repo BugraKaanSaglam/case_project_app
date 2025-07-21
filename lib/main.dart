@@ -1,5 +1,6 @@
 import 'package:case_project_app/database/case_database.dart';
 import 'package:case_project_app/database/db_helper.dart';
+import 'package:case_project_app/helper/navigator_services.dart';
 import 'package:case_project_app/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'global/global_variables.dart';
@@ -29,6 +30,6 @@ class _MainAppState extends State<MainApp> {
     screenHeight = SizerMediaQuery.getH(context);
     screenWidth = SizerMediaQuery.getW(context);
     textScaler = SizerMediaQuery.getText(context);
-    return MaterialApp(debugShowCheckedModeBanner: false, home: const AuthScreen());
+    return MaterialApp(navigatorKey: NavigationService.instance.navigatorKey, debugShowCheckedModeBanner: false, home: const AuthScreen());
   }
 }
