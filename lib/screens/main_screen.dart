@@ -1,10 +1,11 @@
-import 'package:case_project_app/widget/bottombar_items.dart';
-import 'package:case_project_app/widget/movie_card.dart';
-import 'package:case_project_app/widget/resolve_image.dart';
+// lib/views/main_screen.dart
+import 'package:case_project_app/viewmodels/main_viewmodels.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../global/global_scaffold.dart';
-import '../api/api_services.dart';
-import '../dto/movie_dto.dart';
+import '../widget/bottombar_items.dart';
+import '../widget/movie_card.dart';
+import '../widget/resolve_image.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,79 +15,50 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late final ApiService _apiService;
   final PageController _pageController = PageController();
-  final List<MovieDTO> _displayedMovies = [];
-  int _currentPage = 0;
-  final int _pageSize = 5;
-  bool _isLoading = false;
-  bool _hasMore = true;
-  List<MovieDTO> _favoriteMovies = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _apiService = ApiService.instance;
-    _initData();
-  }
-
-  Future<void> _initData() async {
-    await _fetchMovies();
-    await _refreshFavorites();
-  }
-
-  Future<void> _fetchMovies() async {
-    if (_isLoading) return;
-    setState(() => _isLoading = true);
-    final fetched = await _apiService.fetchMoviePage(context: context, page: _currentPage + 1);
-    setState(() {
-      _currentPage++;
-      _displayedMovies.addAll(fetched!);
-      _hasMore = fetched.length == _pageSize;
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _refreshFavorites() async {
-    _favoriteMovies = await _apiService.getFavoriteMovies(context: context) ?? [];
-    final favIds = _favoriteMovies.map((m) => m.id).toSet();
-    setState(() {
-      for (var m in _displayedMovies) {
-        m.isFavorite = favIds.contains(m.id);
-      }
-    });
-  }
-
-  Future<void> _toggleFavorite(String movieId) async {
-    await _apiService.toggleFavorite(context: context, movieId);
-    await _refreshFavorites();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: '', body: mainBody(), bottomBarItems: bottomBarItems(context, widget, _favoriteMovies), isBackButtonVisible: false, isAppbarVisible: false);
+    return ChangeNotifierProvider<MainViewModel>(
+      create: (_) {
+        final vm = MainViewModel();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          vm.initData(context);
+        });
+        return vm;
+      },
+      child: Consumer<MainViewModel>(
+        builder: (context, vm, _) {
+          return globalScaffold(title: '', body: _buildPageView(vm), bottomBarItems: bottomBarItems(context, widget, vm.favoriteMovies), isBackButtonVisible: false, isAppbarVisible: false);
+        },
+      ),
+    );
   }
 
-  Widget mainBody() {
+  Widget _buildPageView(MainViewModel vm) {
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.vertical,
-      itemCount: _displayedMovies.length + (_hasMore ? 1 : 0),
+      itemCount: vm.displayedMovies.length + (vm.hasMore ? 1 : 0),
       onPageChanged: (index) {
-        if (index >= _displayedMovies.length - 2 && !_isLoading && _hasMore) _fetchMovies();
+        if (index >= vm.displayedMovies.length - 2 && !vm.isLoading && vm.hasMore) {
+          vm.fetchMovies(context);
+        }
       },
       itemBuilder: (context, index) {
-        if (index == _displayedMovies.length) return const Center(child: CircularProgressIndicator());
+        if (index == vm.displayedMovies.length) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-        final movie = _displayedMovies[index];
-        final isFav = movie.isFavorite;
-
+        final movie = vm.displayedMovies[index];
         return FutureBuilder<String>(
           future: resolveBestImageUrl(movie),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+
             final imageUrl = (snapshot.hasData && snapshot.data!.isNotEmpty) ? snapshot.data! : (movie.images.isNotEmpty ? movie.images.first : '');
-            return MovieCard(movie: movie, isFavorite: isFav, imageUrl: imageUrl, onToggleFavorite: () => _toggleFavorite(movie.id));
+
+            return MovieCard(movie: movie, isFavorite: movie.isFavorite, imageUrl: imageUrl, onToggleFavorite: () => vm.toggleFavorite(context, movie.id));
           },
         );
       },
