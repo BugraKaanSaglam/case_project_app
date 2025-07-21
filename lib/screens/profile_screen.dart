@@ -49,7 +49,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         CircleAvatar(radius: 36, backgroundImage: NetworkImage(loginDTO.photoUrl ?? 'https://via.placeholder.com/150')),
         const SizedBox(width: 16),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(loginDTO.name, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)), const SizedBox(height: 4), Text('ID: ${loginDTO.id}', style: const TextStyle(color: Colors.white54, fontSize: 14))])),
-        ElevatedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ProfilephotoScreen())), style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)), child: const Text('Fotoğraf Ekle', style: TextStyle(fontSize: 14, color: Colors.white))),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => ProfilephotoScreen())).then((shouldRefresh) {
+              if (shouldRefresh == true) setState(() {});
+            });
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
+          child: const Text('Fotoğraf Ekle', style: TextStyle(fontSize: 14, color: Colors.white)),
+        ),
       ],
     );
   }

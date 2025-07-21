@@ -196,7 +196,7 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
     }
     if (_signUpFormKey.currentState!.validate()) {
       try {
-        ApiService().register(email: _signUpEmailController.text.trim(), name: _signUpNameController.text.trim(), password: _signUpPasswordController.text.trim());
+        await ApiService.instance.register(context: context, email: _signUpEmailController.text.trim(), name: _signUpNameController.text.trim(), password: _signUpPasswordController.text.trim());
 
         setState(() {
           isSignIn = true;
@@ -214,7 +214,7 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
     if (_signInFormKey.currentState!.validate()) {
       try {
         //Get Login Data
-        loginDTO = await ApiService().login(email: _signInEmailController.text.trim(), password: _signInPasswordController.text.trim());
+        await ApiService.instance.login(context: context, email: _signInEmailController.text.trim(), password: _signInPasswordController.text.trim());
 
         if (isRememberMe) {
           globalDatabase.loginEmail = _signInEmailController.text;

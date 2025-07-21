@@ -1,5 +1,5 @@
 class LoginDTO {
-  final String token;
+  String? token;
   final String id;
   final String name;
   final String email;

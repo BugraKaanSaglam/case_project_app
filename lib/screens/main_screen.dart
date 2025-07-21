@@ -3,7 +3,6 @@ import 'package:case_project_app/widget/movie_card.dart';
 import 'package:case_project_app/widget/resolve_image.dart';
 import 'package:flutter/material.dart';
 import '../global/global_scaffold.dart';
-import '../global/global_variables.dart';
 import '../api/api_services.dart';
 import '../dto/movie_dto.dart';
 
@@ -27,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _apiService = ApiService(token: loginDTO.token);
+    _apiService = ApiService.instance;
     _initData();
   }
 
@@ -39,17 +38,17 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> _fetchMovies() async {
     if (_isLoading) return;
     setState(() => _isLoading = true);
-    final fetched = await _apiService.fetchMoviePage(page: _currentPage + 1);
+    final fetched = await _apiService.fetchMoviePage(context: context, page: _currentPage + 1);
     setState(() {
       _currentPage++;
-      _displayedMovies.addAll(fetched);
+      _displayedMovies.addAll(fetched!);
       _hasMore = fetched.length == _pageSize;
       _isLoading = false;
     });
   }
 
   Future<void> _refreshFavorites() async {
-    _favoriteMovies = await _apiService.getFavoriteMovies();
+    _favoriteMovies = await _apiService.getFavoriteMovies(context: context) ?? [];
     final favIds = _favoriteMovies.map((m) => m.id).toSet();
     setState(() {
       for (var m in _displayedMovies) {
@@ -59,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _toggleFavorite(String movieId) async {
-    await _apiService.toggleFavorite(movieId);
+    await _apiService.toggleFavorite(context: context, movieId);
     await _refreshFavorites();
   }
 
@@ -74,14 +73,10 @@ class _MainScreenState extends State<MainScreen> {
       scrollDirection: Axis.vertical,
       itemCount: _displayedMovies.length + (_hasMore ? 1 : 0),
       onPageChanged: (index) {
-        if (index >= _displayedMovies.length - 2 && !_isLoading && _hasMore) {
-          _fetchMovies();
-        }
+        if (index >= _displayedMovies.length - 2 && !_isLoading && _hasMore) _fetchMovies();
       },
       itemBuilder: (context, index) {
-        if (index == _displayedMovies.length) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (index == _displayedMovies.length) return const Center(child: CircularProgressIndicator());
 
         final movie = _displayedMovies[index];
         final isFav = movie.isFavorite;
