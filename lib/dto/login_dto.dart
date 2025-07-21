@@ -3,7 +3,7 @@ class LoginDTO {
   final String id;
   final String name;
   final String email;
-  final String? photoUrl;
+  String? photoUrl;
 
   LoginDTO({required this.token, required this.id, required this.name, required this.email, this.photoUrl});
 

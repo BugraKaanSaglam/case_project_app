@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
+import 'package:case_project_app/api/api_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:case_project_app/global/global_scaffold.dart';
 import 'package:case_project_app/global/global_variables.dart';
@@ -18,9 +21,16 @@ class _ProfilephotoScreenState extends State<ProfilephotoScreen> {
   Future<void> _pickImageFromGallery() async {
     final XFile? picked = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 800, imageQuality: 80);
     if (picked != null) {
-      setState(() {
-        _selectedImage = File(picked.path);
-      });
+      try {
+        String resUrl = await ApiService().uploadPhoto(File(picked.path));
+        // Update the global loginDTO with the new photo URL
+        loginDTO.photoUrl = resUrl;
+        setState(() {
+          _selectedImage = File(picked.path);
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fotoğraf yüklenirken hata oluştu: $e')));
+      }
     }
   }
 

@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:case_project_app/global/global_constants.dart';
 import 'package:case_project_app/dto/login_dto.dart';
 import 'package:case_project_app/dto/profile_dto.dart';
-import 'package:case_project_app/dto/photo_dto.dart';
 import 'package:case_project_app/dto/movie_dto.dart';
 
 class ApiService {
@@ -50,10 +49,17 @@ class ApiService {
   }
 
   // Upload Photo: upload a profile picture and receive URL
-  Future<PhotoDTO> uploadPhoto(File file) async {
-    final formData = FormData.fromMap({'file': await MultipartFile.fromFile(file.path, filename: file.uri.pathSegments.last)});
-    final response = await _dio.post('/user/upload_photo', data: formData);
-    return PhotoDTO.fromJson(response.data as Map<String, dynamic>);
+  Future<String> uploadPhoto(File file) async {
+    final fileName = file.uri.pathSegments.last;
+    final formData = FormData.fromMap({'file': await MultipartFile.fromFile(file.path, filename: fileName)});
+
+    final response = await _dio.post('/user/upload_photo', data: formData, options: Options(headers: {'Content-Type': 'multipart/form-data', if (_token != null) 'Authorization': 'Bearer $_token'}, validateStatus: (status) => status != null && status < 500));
+
+    if (response.statusCode == 200) {
+      return (response.data as Map<String, dynamic>)['photoUrl'] as String;
+    } else {
+      throw Exception('Upload failed (${response.statusCode}): ${response.data}');
+    }
   }
 
   // Toggle Favorite: add or remove a movie from favorites
