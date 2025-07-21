@@ -55,11 +55,9 @@ class ApiService {
 
     final response = await _dio.post('/user/upload_photo', data: formData, options: Options(headers: {'Content-Type': 'multipart/form-data', if (_token != null) 'Authorization': 'Bearer $_token'}, validateStatus: (status) => status != null && status < 500));
 
-    if (response.statusCode == 200) {
-      return (response.data as Map<String, dynamic>)['photoUrl'] as String;
-    } else {
-      throw Exception('Upload failed (${response.statusCode}): ${response.data}');
-    }
+    if (response.statusCode == 200) return (response.data as Map<String, dynamic>)['photoUrl'] as String;
+
+    throw Exception('Upload failed (${response.statusCode}): ${response.data}');
   }
 
   // Toggle Favorite: add or remove a movie from favorites
