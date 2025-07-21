@@ -2,19 +2,20 @@
 
 import 'package:flutter/material.dart';
 
-Widget globalScaffold({required String title, required Widget body, List<Widget> bottomBarItems = const [], bool isBackButtonVisible = true, bool isAppbarVisible = true}) {
-  return Scaffold(backgroundColor: Colors.black87, extendBodyBehindAppBar: true, appBar: isAppbarVisible ? globalAppbar(title, isBackButtonVisible) : null, body: globalBody(body), bottomNavigationBar: bottomBarItems.isNotEmpty ? globalBottomNavigationBar(items: bottomBarItems) : null);
+Widget globalScaffold({required String title, required Widget body, List<Widget> bottomBarItems = const [], bool isBackButtonVisible = true, bool isAppbarVisible = true, Widget? trailingButton}) {
+  return Scaffold(backgroundColor: Colors.black87, extendBodyBehindAppBar: true, appBar: isAppbarVisible ? globalAppbar(title, isBackButtonVisible, trailingButton) : null, body: globalBody(body), bottomNavigationBar: bottomBarItems.isNotEmpty ? globalBottomNavigationBar(items: bottomBarItems) : null);
 }
 
 SafeArea globalBody(Widget body) {
   return SafeArea(child: Stack(children: [SafeArea(child: body)]));
 }
 
-AppBar globalAppbar(String title, bool isBackButtonVisible) {
+AppBar globalAppbar(String title, bool isBackButtonVisible, Widget? trailingButton) {
   return AppBar(
     backgroundColor: Colors.transparent,
     centerTitle: true,
     elevation: 0,
+    actions: [trailingButton ?? Center()],
     //Title
     title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
     //BackButton

@@ -6,6 +6,7 @@ import 'package:case_project_app/screens/profilephoto_screen.dart';
 import 'package:case_project_app/widget/bottombar_items.dart';
 import 'package:case_project_app/widget/resolve_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../global/global_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,9 +18,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Widget _actionButton() {
+    return ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)), child: Row(spacing: 5, children: [FaIcon(FontAwesomeIcons.gem, color: Colors.white), const Text('Sınırlı Teklif', style: TextStyle(fontSize: 14, color: Colors.white))]));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: 'Profil Detayı', body: profileBody(), bottomBarItems: bottomBarItems(context, widget, widget.favoriteMovies), isBackButtonVisible: true, isAppbarVisible: true);
+    return globalScaffold(title: 'Profil Detayı', body: profileBody(), bottomBarItems: bottomBarItems(context, widget, widget.favoriteMovies), isBackButtonVisible: true, isAppbarVisible: true, trailingButton: _actionButton());
   }
 
   Widget profileBody() {
