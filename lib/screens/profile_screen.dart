@@ -6,6 +6,7 @@ import 'package:case_project_app/screens/profilephoto_screen.dart';
 import 'package:case_project_app/widget/bottombar_items.dart';
 import 'package:case_project_app/widget/limitedoffer_bottombarsheet.dart';
 import 'package:case_project_app/widget/resolve_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../global/global_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,36 +19,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Widget _actionButton() {
-    return ElevatedButton(onPressed: () => showLimitedOfferBottomSheet(context), style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)), child: Row(mainAxisSize: MainAxisSize.min, children: const [Icon(Icons.local_offer, color: Colors.white), SizedBox(width: 8), Text('Sınırlı Teklif', style: TextStyle(fontSize: 14, color: Colors.white))]));
+    return ElevatedButton(onPressed: () => showLimitedOfferBottomSheet(context), style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)), child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.local_offer, color: Colors.white), const SizedBox(width: 8), Text('sinirli_teklif'.tr(), style: const TextStyle(fontSize: 14, color: Colors.white))]));
   }
 
   @override
   Widget build(BuildContext context) {
-    return globalScaffold(title: 'Profil Detayı', body: _buildBody(), bottomBarItems: bottomBarItems(context, widget, widget.favoriteMovies), isBackButtonVisible: true, isAppbarVisible: true, trailingButton: _actionButton());
+    return globalScaffold(title: 'profil_detayi'.tr(), body: _buildBody(), bottomBarItems: bottomBarItems(context, widget, widget.favoriteMovies), isBackButtonVisible: true, isAppbarVisible: true, trailingButton: _actionButton());
   }
 
   Widget _buildBody() {
     final favs = widget.favoriteMovies;
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child:
-          favs.isEmpty
-              ? Center(child: Text('Favori film bulunamadı.', style: TextStyle(color: Colors.white, fontSize: 16)))
-              : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //* Profile Header
-                    _profileHeader(),
-                    const SizedBox(height: 24),
-                    const Text('Beğendiğim Filmler', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 16),
-                    //* Movies List
-                    _moviesGrid(favs),
-                  ],
-                ),
-              ),
-    );
+    return Padding(padding: const EdgeInsets.all(16), child: favs.isEmpty ? Center(child: Text('favori_film_bulunamadi'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16))) : SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [_profileHeader(), const SizedBox(height: 24), Text('begendigim_filmler'.tr(), style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)), const SizedBox(height: 16), _moviesGrid(favs)])));
   }
 
   Widget _profileHeader() {
@@ -64,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             });
           },
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red, shape: const StadiumBorder(), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
-          child: const Text('Fotoğraf Ekle', style: TextStyle(fontSize: 14, color: Colors.white)),
+          child: Text('fotograf_ekle'.tr(), style: const TextStyle(fontSize: 14, color: Colors.white)),
         ),
       ],
     );
@@ -85,11 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             final imageUrl = (snapshot.hasData && snapshot.data!.isNotEmpty) ? snapshot.data! : (movie.images.isNotEmpty ? movie.images.first : '');
-            return Card(
-              color: Colors.black.withValues(alpha: 0.3), // ← eski withOpacity(0.3) yerine
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(8)), child: Image.network(imageUrl, fit: BoxFit.cover, width: double.infinity))), Padding(padding: const EdgeInsets.all(8.0), child: Text(movie.title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)))]),
-            );
+            return Card(color: Colors.black.withValues(alpha: 0.3), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(8)), child: Image.network(imageUrl, fit: BoxFit.cover, width: double.infinity))), Padding(padding: const EdgeInsets.all(8.0), child: Text(movie.title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)))]));
           },
         );
       },

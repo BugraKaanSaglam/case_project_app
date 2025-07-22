@@ -1,11 +1,12 @@
 import 'package:case_project_app/global/global_variables.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<String?> showAnimatedErrorDialog(BuildContext context, {required String title, required String message, Color? backgroundColor, Color? titleColor, Color? messageColor, Color? buttonColor, Color? buttonTextColor}) {
   return showGeneralDialog<String?>(
     context: context,
     barrierDismissible: false,
-    barrierLabel: 'ErrorDialog',
+    barrierLabel: 'error'.tr(),
     pageBuilder: (context, animation, secondaryAnimation) {
       return Container();
     },

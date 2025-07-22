@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:case_project_app/global/global_scaffold.dart';
 import 'package:case_project_app/global/global_variables.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProfilephotoScreen extends StatelessWidget {
   const ProfilephotoScreen({super.key});
@@ -15,7 +16,7 @@ class ProfilephotoScreen extends StatelessWidget {
       create: (_) => ProfilePhotoViewModel(),
       child: Consumer<ProfilePhotoViewModel>(
         builder: (context, vm, _) {
-          return globalScaffold(title: 'Profil Fotoğrafı Ekle', body: _body(context, vm), isBackButtonVisible: false);
+          return globalScaffold(title: 'profil_fotografi_ekle'.tr(), body: _body(context, vm), isBackButtonVisible: false);
         },
       ),
     );
@@ -31,9 +32,9 @@ class ProfilephotoScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 40),
-          const Text('Fotoğraflarınızı Yükleyin', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+          Text('fotograflarinizi_yukleyin'.tr(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          const Text('Resources out incentivize\nrelaxation floor loss cc.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70, fontSize: 14)),
+          Text('fotograf_yukleme_aciklama'.tr(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70, fontSize: 14)),
           const SizedBox(height: 40),
           Center(
             child: GestureDetector(
@@ -41,7 +42,7 @@ class ProfilephotoScreen extends StatelessWidget {
                 try {
                   await vm.pickAndUpload(context);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fotoğraf yüklenirken hata: \$e')));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('fotograf_yuklenirken_hata'.tr(args: [e.toString()]))));
                 }
               },
               child: Container(
@@ -67,7 +68,7 @@ class ProfilephotoScreen extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          ElevatedButton(onPressed: () => Navigator.of(context).pop(true), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), padding: const EdgeInsets.symmetric(vertical: 16)), child: const Text('Devam Et', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white))),
+          ElevatedButton(onPressed: () => Navigator.of(context).pop(true), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), padding: const EdgeInsets.symmetric(vertical: 16)), child: Text('devam_et'.tr(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white))),
           const SizedBox(height: 20),
         ],
       ),

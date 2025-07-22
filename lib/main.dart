@@ -1,35 +1,68 @@
 import 'package:case_project_app/database/case_database.dart';
 import 'package:case_project_app/database/db_helper.dart';
+import 'package:case_project_app/enums/language_enum.dart';
 import 'package:case_project_app/helper/navigator_services.dart';
 import 'package:case_project_app/screens/auth_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'global/global_variables.dart';
 import 'helper/media_query_size.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await initDB();
-  runApp(const MainApp());
+  runApp(EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('tr', 'TR')], path: 'assets/translations', fallbackLocale: const Locale('tr', 'TR'), child: const MainApp()));
 }
 
 Future<void> initDB() async {
-  DBHelper dbHelper = DBHelper();
+  final dbHelper = DBHelper();
   globalDatabase = await dbHelper.getByVer(1) ?? CaseDatabase(ver: 1, loginEmail: '', loginSifre: '', language: 'tr', isRememberLogin: false);
   await dbHelper.insertOrReplace(globalDatabase);
 }
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
   @override
   State<MainApp> createState() => _MainAppState();
 }
 
 class _MainAppState extends State<MainApp> {
+  late LanguageEnum languageCode;
+  @override
+  void initState() {
+    super.initState();
+    //* Changing Current Language due to Database
+    if (globalDatabase.language != '') languageCode = LanguageEnum.getLanguageFromString(globalDatabase.language);
+    //* Listen for incoming deep links
+  }
+
+  void setLocale(LanguageEnum language) {
+    setState(() {
+      languageCode = LanguageEnum.getLanguageFromValue(language.value);
+      String langCode = language.shortName.split('-')[0]; // "en-US" -> "en"
+      String countryCode = language.shortName.split('-').length > 1 ? language.shortName.split('-')[1] : '';
+
+      context.setLocale(Locale(langCode, countryCode));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = SizerMediaQuery.getH(context);
     screenWidth = SizerMediaQuery.getW(context);
     textScaler = SizerMediaQuery.getText(context);
-    return MaterialApp(navigatorKey: NavigationService.instance.navigatorKey, debugShowCheckedModeBanner: false, home: const AuthScreen());
+
+    return MaterialApp(
+      //* Localization
+      locale: context.locale,
+      supportedLocales: const [Locale('en', 'US'), Locale('tr', 'TR')],
+      localizationsDelegates: context.localizationDelegates,
+      //
+      navigatorKey: NavigationService.instance.navigatorKey,
+      debugShowCheckedModeBanner: false,
+      home: const AuthScreen(),
+    );
   }
 }

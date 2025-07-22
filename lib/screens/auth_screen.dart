@@ -2,6 +2,7 @@ import 'package:case_project_app/global/global_variables.dart';
 import 'package:case_project_app/viewmodels/auth_viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../global/global_scaffold.dart';
 import '../widget/social_buttons.dart';
 
@@ -25,7 +26,7 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
   @override
   void initState() {
     super.initState();
-    _signInEmailController.text = globalDatabase.loginEmail; // initial from local DB
+    _signInEmailController.text = globalDatabase.loginEmail;
     _signInPasswordController.text = globalDatabase.loginSifre;
   }
 
@@ -84,16 +85,16 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
             key: _signInFormKey,
             child: Column(
               children: [
-                Text('Merhabalar', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(32), fontWeight: FontWeight.bold)),
+                Text('merhabalar'.tr(), style: TextStyle(color: Colors.white, fontSize: textScaler.scale(32), fontWeight: FontWeight.bold)),
                 const SizedBox(height: 30),
-                TextFormField(controller: _signInEmailController, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'Email boş bırakılamaz' : null),
+                TextFormField(controller: _signInEmailController, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'email'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
                 const SizedBox(height: 24),
-                TextFormField(controller: _signInPasswordController, obscureText: true, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'Şifre', labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'Şifre boş bırakılamaz' : null),
+                TextFormField(controller: _signInPasswordController, obscureText: true, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'sifre'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 20),
-                ElevatedButton(onPressed: () => vm.signIn(context, _signInEmailController.text, _signInPasswordController.text, _signInFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrangeAccent), child: Text('GİRİŞ', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
-                Row(children: [Checkbox(value: vm.isRememberMe, onChanged: vm.setRememberMe), Text('Beni Hatırla', style: TextStyle(color: Colors.white70, fontSize: textScaler.scale(16)))]),
+                ElevatedButton(onPressed: () => vm.signIn(context, _signInEmailController.text, _signInPasswordController.text, _signInFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrangeAccent), child: Text('giris'.tr(), style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
+                Row(children: [Checkbox(value: vm.isRememberMe, onChanged: vm.setRememberMe), Text('beni_hatirla'.tr(), style: TextStyle(color: Colors.white70, fontSize: textScaler.scale(16)))]),
                 SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
-                TextButton(onPressed: vm.toggleMode, child: Text('Kayıt Ol', style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
+                TextButton(onPressed: vm.toggleMode, child: Text('kayit_ol'.tr(), style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
               ],
             ),
           ),
@@ -113,19 +114,19 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
             key: _signUpFormKey,
             child: Column(
               children: [
-                Text('Hoşgeldiniz', style: TextStyle(color: Colors.white, fontSize: textScaler.scale(28), fontWeight: FontWeight.bold)),
+                Text('hosgeldiniz'.tr(), style: TextStyle(color: Colors.white, fontSize: textScaler.scale(28), fontWeight: FontWeight.bold)),
                 const SizedBox(height: 24),
-                TextFormField(controller: _signUpNameController, decoration: InputDecoration(labelText: 'İsim'), validator: (v) => v!.isEmpty ? 'İsim boş bırakılamaz' : null),
+                TextFormField(controller: _signUpNameController, decoration: InputDecoration(labelText: 'isim'.tr()), validator: (v) => v!.isEmpty ? 'isim_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpEmailController, decoration: InputDecoration(labelText: 'Email'), validator: (v) => v!.isEmpty ? 'Email boş bırakılamaz' : null),
+                TextFormField(controller: _signUpEmailController, decoration: InputDecoration(labelText: 'email'.tr()), validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpPasswordController, obscureText: true, decoration: InputDecoration(labelText: 'Şifre'), validator: (v) => v!.isEmpty ? 'Şifre boş bırakılamaz' : null),
+                TextFormField(controller: _signUpPasswordController, obscureText: true, decoration: InputDecoration(labelText: 'sifre'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpPassword2Controller, obscureText: true, decoration: InputDecoration(labelText: 'Şifre Tekrar'), validator: (v) => v!.isEmpty ? 'Şifre boş bırakılamaz' : null),
+                TextFormField(controller: _signUpPassword2Controller, obscureText: true, decoration: InputDecoration(labelText: 'sifre_tekrar'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 24),
-                ElevatedButton(onPressed: () => vm.signUp(context, _signUpNameController.text, _signUpEmailController.text, _signUpPasswordController.text, _signUpPassword2Controller.text, _signUpFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent), child: Text('KAYDOL', style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
+                ElevatedButton(onPressed: () => vm.signUp(context, _signUpNameController.text, _signUpEmailController.text, _signUpPasswordController.text, _signUpPassword2Controller.text, _signUpFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent), child: Text('kaydol'.tr(), style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
                 SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
-                TextButton(onPressed: vm.toggleMode, child: Text('Giriş Yap', style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
+                TextButton(onPressed: vm.toggleMode, child: Text('giris_yap'.tr(), style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
               ],
             ),
           ),

@@ -19,7 +19,8 @@ dependencies:
   provider: ^6.1.5
   flutter_native_splash: ^2.4.6
   flutter_launcher_icons: ^0.14.4
-
+  easy_localization: ^3.0.7+1
+  
 flutter_icons:
   android: true
   ios: true
@@ -30,11 +31,12 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
-flutter:
+flutter:   
+  generate: true
   uses-material-design: true
-  assets:
+  assets: 
     - assets/images/
-
+    - assets/translations/
 flutter_native_splash:
   color: "#FFFFFF"                
   image: assets/images/splash_logo.png
