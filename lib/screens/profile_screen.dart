@@ -37,12 +37,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //*Profile Header
+                    //* Profile Header
                     _profileHeader(),
                     const SizedBox(height: 24),
                     const Text('Beğendiğim Filmler', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
-                    //*Movies List
+                    //* Movies List
                     _moviesGrid(favs),
                   ],
                 ),
