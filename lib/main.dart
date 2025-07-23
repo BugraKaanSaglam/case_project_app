@@ -25,10 +25,10 @@ class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<MainApp> createState() => MainAppState();
 }
 
-class _MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> {
   late LanguageEnum languageCode;
   @override
   void initState() {
@@ -36,16 +36,6 @@ class _MainAppState extends State<MainApp> {
     //* Changing Current Language due to Database
     if (globalDatabase.language != '') languageCode = LanguageEnum.getLanguageFromString(globalDatabase.language);
     //* Listen for incoming deep links
-  }
-
-  void setLocale(LanguageEnum language) {
-    setState(() {
-      languageCode = LanguageEnum.getLanguageFromValue(language.value);
-      String langCode = language.shortName.split('-')[0]; // "en-US" -> "en"
-      String countryCode = language.shortName.split('-').length > 1 ? language.shortName.split('-')[1] : '';
-
-      context.setLocale(Locale(langCode, countryCode));
-    });
   }
 
   @override

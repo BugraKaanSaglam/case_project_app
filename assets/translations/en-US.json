@@ -24,5 +24,11 @@
     "fotograflarinizi_yukleyin": "Upload Your Photos",
     "fotograf_yukleme_aciklama": "Resources out incentivize\nrelaxation floor loss cc.",
     "fotograf_yuklenirken_hata": "Error uploading photo: {0}",
-    "devam_et": "Continue"
+    "devam_et": "Continue",
+    "sifreler_eslesmiyor": "Passwords do not match!",
+    "basarili": "Success",
+    "giris_yapabilirsiniz": "You can now sign in!",
+    "kayit_hatasi": "An error occurred during registration! {0}",
+    "giris_bilgileri_hata": "Please check your login credentials! {0}",
+    "isim_bos": "Name cannot be Empty"
 }

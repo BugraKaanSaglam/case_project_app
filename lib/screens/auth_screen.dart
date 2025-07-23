@@ -1,5 +1,6 @@
 import 'package:case_project_app/global/global_variables.dart';
 import 'package:case_project_app/viewmodels/auth_viewmodels.dart';
+import 'package:case_project_app/widget/languagetoggle_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,6 +15,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
+  TextStyle style = TextStyle(color: Colors.white, fontSize: textScaler.scale(18));
   final _signInFormKey = GlobalKey<FormState>();
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInEmailController = TextEditingController();
@@ -22,6 +24,17 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
   final _signUpEmailController = TextEditingController();
   final _signUpPasswordController = TextEditingController();
   final _signUpPassword2Controller = TextEditingController();
+  Locale? _prevLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = context.locale;
+    if (_prevLocale != locale) {
+      _prevLocale = locale;
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
@@ -87,13 +100,19 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
               children: [
                 Text('merhabalar'.tr(), style: TextStyle(color: Colors.white, fontSize: textScaler.scale(32), fontWeight: FontWeight.bold)),
                 const SizedBox(height: 30),
-                TextFormField(controller: _signInEmailController, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'email'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
+                TextFormField(controller: _signInEmailController, style: style, decoration: InputDecoration(labelText: 'email'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
                 const SizedBox(height: 24),
-                TextFormField(controller: _signInPasswordController, obscureText: true, style: TextStyle(color: Colors.white, fontSize: textScaler.scale(18)), decoration: InputDecoration(labelText: 'sifre'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
+                TextFormField(controller: _signInPasswordController, obscureText: true, style: style, decoration: InputDecoration(labelText: 'sifre'.tr(), labelStyle: TextStyle(fontSize: textScaler.scale(16), color: Colors.white70)), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: () => vm.signIn(context, _signInEmailController.text, _signInPasswordController.text, _signInFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrangeAccent), child: Text('giris'.tr(), style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
+                const SizedBox(height: 20),
+
                 Row(children: [Checkbox(value: vm.isRememberMe, onChanged: vm.setRememberMe), Text('beni_hatirla'.tr(), style: TextStyle(color: Colors.white70, fontSize: textScaler.scale(16)))]),
+                const SizedBox(height: 20),
                 SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
+                const SizedBox(height: 20),
+                LanguageToggleButton(),
+                const SizedBox(height: 20),
                 TextButton(onPressed: vm.toggleMode, child: Text('kayit_ol'.tr(), style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
               ],
             ),
@@ -116,13 +135,13 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
               children: [
                 Text('hosgeldiniz'.tr(), style: TextStyle(color: Colors.white, fontSize: textScaler.scale(28), fontWeight: FontWeight.bold)),
                 const SizedBox(height: 24),
-                TextFormField(controller: _signUpNameController, decoration: InputDecoration(labelText: 'isim'.tr()), validator: (v) => v!.isEmpty ? 'isim_bos'.tr() : null),
+                TextFormField(controller: _signUpNameController, decoration: InputDecoration(labelText: 'isim'.tr()), style: style, validator: (v) => v!.isEmpty ? 'isim_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpEmailController, decoration: InputDecoration(labelText: 'email'.tr()), validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
+                TextFormField(controller: _signUpEmailController, decoration: InputDecoration(labelText: 'email'.tr()), style: style, validator: (v) => v!.isEmpty ? 'email_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpPasswordController, obscureText: true, decoration: InputDecoration(labelText: 'sifre'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
+                TextFormField(controller: _signUpPasswordController, obscureText: true, style: style, decoration: InputDecoration(labelText: 'sifre'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 16),
-                TextFormField(controller: _signUpPassword2Controller, obscureText: true, decoration: InputDecoration(labelText: 'sifre_tekrar'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
+                TextFormField(controller: _signUpPassword2Controller, obscureText: true, style: style, decoration: InputDecoration(labelText: 'sifre_tekrar'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 24),
                 ElevatedButton(onPressed: () => vm.signUp(context, _signUpNameController.text, _signUpEmailController.text, _signUpPasswordController.text, _signUpPassword2Controller.text, _signUpFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent), child: Text('kaydol'.tr(), style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
                 const SizedBox(height: 16),

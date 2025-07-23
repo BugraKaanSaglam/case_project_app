@@ -24,5 +24,11 @@
     "fotograflarinizi_yukleyin": "Fotoğraflarınızı Yükleyin",
     "fotograf_yukleme_aciklama": "Resources out incentivize\nrelaxation floor loss cc.",
     "fotograf_yuklenirken_hata": "Fotoğraf yüklenirken hata: {0}",
-    "devam_et": "Devam Et"
+    "devam_et": "Devam Et",
+    "sifreler_eslesmiyor": "Şifreler eşleşmiyor!",
+    "basarili": "Başarılı",
+    "giris_yapabilirsiniz": "Giriş yapabilirsiniz!",
+    "kayit_hatasi": "Kayıt sırasında bir hata oluştu! {0}",
+    "giris_bilgileri_hata": "Lütfen giriş bilgilerinizi kontrol ediniz! {0}",
+    "isim_bos": "İsim Boş Bırakılamaz"
 }
