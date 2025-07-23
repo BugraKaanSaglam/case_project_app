@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../global/global_scaffold.dart';
 import '../widget/bottombar_items.dart';
 import '../widget/movie_card.dart';
-import '../widget/resolve_image.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -29,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: Consumer<MainViewModel>(
         builder: (context, vm, _) {
-          return globalScaffold(title: '', body: _buildPageView(vm), bottomBarItems: bottomBarItems(context, widget, vm.favoriteMovies), isBackButtonVisible: false, isAppbarVisible: false);
+          return globalScaffold(title: '', body: RefreshIndicator(onRefresh: () => vm.refreshData(context), child: _buildPageView(vm)), bottomBarItems: bottomBarItems(context, widget, vm.favoriteMovies), isBackButtonVisible: false, isAppbarVisible: false);
         },
       ),
     );
@@ -49,15 +48,14 @@ class _MainScreenState extends State<MainScreen> {
         if (index == vm.displayedMovies.length) {
           return const Center(child: CircularProgressIndicator());
         }
-
         final movie = vm.displayedMovies[index];
         return FutureBuilder<String>(
-          future: resolveBestImageUrl(movie),
+          future: vm.getImageUrl(movie),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-
-            final imageUrl = (snapshot.hasData && snapshot.data!.isNotEmpty) ? snapshot.data! : (movie.images.isNotEmpty ? movie.images.first : '');
-
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final imageUrl = snapshot.data!.isNotEmpty ? snapshot.data! : (movie.images.isNotEmpty ? movie.images.first : '');
             return MovieCard(movie: movie, isFavorite: movie.isFavorite, imageUrl: imageUrl, onToggleFavorite: () => vm.toggleFavorite(context, movie.id));
           },
         );
