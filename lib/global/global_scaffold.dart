@@ -4,7 +4,7 @@ import 'package:case_project_app/helper/navigator_services.dart';
 import 'package:flutter/material.dart';
 
 Widget globalScaffold({required String title, required Widget body, List<Widget> bottomBarItems = const [], bool isBackButtonVisible = true, bool isAppbarVisible = true, Widget? trailingButton}) {
-  return Scaffold(backgroundColor: Colors.black87, extendBodyBehindAppBar: true, appBar: isAppbarVisible ? globalAppbar(title, isBackButtonVisible, trailingButton) : null, body: globalBody(body), bottomNavigationBar: bottomBarItems.isNotEmpty ? globalBottomNavigationBar(items: bottomBarItems) : null);
+  return Scaffold(resizeToAvoidBottomInset: false, backgroundColor: Colors.black87, extendBodyBehindAppBar: true, appBar: isAppbarVisible ? globalAppbar(title, isBackButtonVisible, trailingButton) : null, body: globalBody(body), bottomNavigationBar: bottomBarItems.isNotEmpty ? globalBottomNavigationBar(items: bottomBarItems) : null);
 }
 
 SafeArea globalBody(Widget body) {
