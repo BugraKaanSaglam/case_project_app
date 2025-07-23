@@ -26,7 +26,6 @@ class ProfilePhotoViewModel extends ChangeNotifier {
         loginDTO.photoUrl = resUrl;
       }
     } catch (e) {
-      // Bubble up error for view to handle
       rethrow;
     } finally {
       isUploading = false;

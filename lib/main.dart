@@ -59,7 +59,7 @@ class _MainAppState extends State<MainApp> {
       locale: context.locale,
       supportedLocales: const [Locale('en', 'US'), Locale('tr', 'TR')],
       localizationsDelegates: context.localizationDelegates,
-      //
+      //* Navigation
       navigatorKey: NavigationService.instance.navigatorKey,
       debugShowCheckedModeBanner: false,
       home: const AuthScreen(),
