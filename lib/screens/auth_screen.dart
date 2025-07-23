@@ -47,29 +47,29 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
       create: (_) => AuthViewModel(),
       child: Consumer<AuthViewModel>(
         builder: (context, vm, _) {
-          return globalScaffold(
-            isBackButtonVisible: false,
-            title: '',
-            body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 600),
-                transitionBuilder: (child, animation) {
-                  return AnimatedBuilder(
-                    animation: animation,
-                    child: child,
-                    builder: (context, childWidget) {
-                      final status = animation.status;
-                      final color = (status == AnimationStatus.forward || status == AnimationStatus.reverse) ? Colors.black : Colors.blue;
-                      return Card(color: color, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), child: ScaleTransition(scale: animation, child: childWidget));
-                    },
-                  );
-                },
-                child: vm.isSignIn ? _buildSignIn(context, vm) : _buildSignUp(context, vm),
-              ),
-            ),
+          return globalScaffold(isBackButtonVisible: false, title: '', body: _authBody(context, vm));
+        },
+      ),
+    );
+  }
+
+  Widget _authBody(BuildContext context, AuthViewModel vm) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 600),
+        transitionBuilder: (child, animation) {
+          return AnimatedBuilder(
+            animation: animation,
+            child: child,
+            builder: (context, childWidget) {
+              final status = animation.status;
+              final color = (status == AnimationStatus.forward || status == AnimationStatus.reverse) ? Colors.black : Colors.blue;
+              return Card(color: color, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), child: ScaleTransition(scale: animation, child: childWidget));
+            },
           );
         },
+        child: vm.isSignIn ? _buildSignIn(context, vm) : _buildSignUp(context, vm),
       ),
     );
   }
@@ -125,6 +125,7 @@ class AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMi
                 TextFormField(controller: _signUpPassword2Controller, obscureText: true, decoration: InputDecoration(labelText: 'sifre_tekrar'.tr()), validator: (v) => v!.isEmpty ? 'sifre_bos'.tr() : null),
                 const SizedBox(height: 24),
                 ElevatedButton(onPressed: () => vm.signUp(context, _signUpNameController.text, _signUpEmailController.text, _signUpPasswordController.text, _signUpPassword2Controller.text, _signUpFormKey), style: ElevatedButton.styleFrom(backgroundColor: Colors.tealAccent), child: Text('kaydol'.tr(), style: TextStyle(fontSize: textScaler.scale(18), fontWeight: FontWeight.bold))),
+                const SizedBox(height: 16),
                 SocialLoginButtons(onGoogleTap: () {}, onAppleTap: () {}, onFacebookTap: () {}),
                 TextButton(onPressed: vm.toggleMode, child: Text('giris_yap'.tr(), style: TextStyle(color: Colors.lightBlueAccent, fontSize: textScaler.scale(16)))),
               ],

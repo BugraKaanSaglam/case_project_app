@@ -12,19 +12,19 @@ class AuthViewModel extends ChangeNotifier {
   bool isSignIn = true;
   bool isRememberMe = globalDatabase.isRememberLogin;
 
-  /// Toggles between SignIn and SignUp forms
+  //* Toggles between SignIn and SignUp forms
   void toggleMode() {
     isSignIn = !isSignIn;
     notifyListeners();
   }
 
-  /// Sets the "Remember Me" checkbox
+  //* Sets the "Remember Me" checkbox
   void setRememberMe(bool? value) {
     isRememberMe = value ?? false;
     notifyListeners();
   }
 
-  /// Handles user sign-up logic
+  //* Handles user sign-up logic
   Future<void> signUp(BuildContext context, String name, String email, String password, String password2, GlobalKey<FormState> formKey) async {
     if (password.trim() != password2.trim()) {
       await showAnimatedErrorDialog(context, title: 'HATA', message: 'Şifreler eşleşmiyor!');
@@ -45,9 +45,16 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  /// Handles user sign-in logic
+  //* Handles user sign-in logic
   Future<void> signIn(BuildContext context, String email, String password, GlobalKey<FormState> formKey) async {
     if (!formKey.currentState!.validate()) return;
+
+    // Show spinner
+    showDialog(
+      context: context,
+      barrierDismissible: false, // kullanıcı kapatamasın
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
 
     try {
       await ApiService.instance.login(context: context, email: email.trim(), password: password.trim());
@@ -63,9 +70,15 @@ class AuthViewModel extends ChangeNotifier {
       globalDatabase.isRememberLogin = isRememberMe;
       await DBHelper().update(globalDatabase);
 
+      // Kapat spinner
+      Navigator.of(context, rootNavigator: true).pop();
+
       // Navigate to MainScreen
       NavigationService.instance.navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MainScreen()), (route) => false);
     } catch (e) {
+      // Close spinner
+      Navigator.of(context, rootNavigator: true).pop();
+
       await showAnimatedErrorDialog(context, title: 'HATA', message: 'Lütfen Giriş Bilgilerinizi Kontrol Ediniz! ${e.toString()}');
     }
   }

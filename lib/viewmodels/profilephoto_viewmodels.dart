@@ -11,7 +11,7 @@ class ProfilePhotoViewModel extends ChangeNotifier {
   File? selectedImage;
   bool isUploading = false;
 
-  /// Picks image and uploads it
+  //* Picks Image and Uploads it
   Future<void> pickAndUpload(BuildContext context) async {
     final XFile? picked = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 800, imageQuality: 80);
     if (picked == null) return;
@@ -22,9 +22,7 @@ class ProfilePhotoViewModel extends ChangeNotifier {
 
     try {
       final resUrl = await ApiService.instance.uploadPhoto(context: context, file: selectedImage!);
-      if (resUrl != null) {
-        loginDTO.photoUrl = resUrl;
-      }
+      if (resUrl != null) loginDTO.photoUrl = resUrl;
     } catch (e) {
       rethrow;
     } finally {
