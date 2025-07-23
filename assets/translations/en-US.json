@@ -30,5 +30,17 @@
     "giris_yapabilirsiniz": "You can now sign in!",
     "kayit_hatasi": "An error occurred during registration! {0}",
     "giris_bilgileri_hata": "Please check your login credentials! {0}",
-    "isim_bos": "Name cannot be Empty"
+    "isim_bos": "Name cannot be Empty",
+    "anasayfa": "Home",
+    "profil": "Profile",
+    "limited_offer_desc": "Select a token package to earn bonuses\nand unlock new episodes!",
+    "alacaginiz_bonuslar": "Bonuses You’ll Get",
+    "premium_hesap": "Premium Account",
+    "daha_fazla_eslesme": "More Matches",
+    "one_cikarma": "Boost",
+    "daha_fazla_begeni": "More Likes",
+    "kilidi_acmak_icin": "Choose a token package to unlock",
+    "tum_jetonlari_gor": "View All Tokens",
+    "jeton": "Token",
+    "basina_haftalik": "per week"
 }

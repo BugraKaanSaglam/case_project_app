@@ -30,5 +30,17 @@
     "giris_yapabilirsiniz": "Giriş yapabilirsiniz!",
     "kayit_hatasi": "Kayıt sırasında bir hata oluştu! {0}",
     "giris_bilgileri_hata": "Lütfen giriş bilgilerinizi kontrol ediniz! {0}",
-    "isim_bos": "İsim Boş Bırakılamaz"
+    "isim_bos": "İsim Boş Bırakılamaz",
+    "anasayfa": "Anasayfa",
+    "profil": "Profil",
+    "limited_offer_desc": "Jeton paketini seçerek bonus kazan\nve yeni bölümlerin kilidini açın!",
+    "alacaginiz_bonuslar": "Alacağınız Bonuslar",
+    "premium_hesap": "Premium Hesap",
+    "daha_fazla_eslesme": "Daha Fazla Eşleşme",
+    "one_cikarma": "Öne Çıkarma",
+    "daha_fazla_begeni": "Daha Fazla Beğeni",
+    "kilidi_acmak_icin": "Kilidi açmak için bir jeton paketi seçin",
+    "tum_jetonlari_gor": "Tüm Jetonları Gör",
+    "jeton": "Jeton",
+    "basina_haftalik": "Başına haftalık"
 }
